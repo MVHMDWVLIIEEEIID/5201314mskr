@@ -8,7 +8,7 @@ import FinalStage from "./FinalStage.jsx";
 const developmentBypass = {
   enabled: false,
   stage: 5,
-  phase: 1,
+  phase: 1    ,
 };
 
 export default function LoggedIn({ onLogout }) {
