@@ -5,6 +5,7 @@ import StageThree from "./StageThree.jsx";
 import StageFour from "./StageFour.jsx";
 import FinalStage from "./FinalStage.jsx";
 import finalStageTrack from "./assets/Floating in Reverie.mp3";
+import { preloadStageAssets } from "./lib/stageAssetPreloader.js";
 
 // Edit these while developing to choose where the app starts.
 // This configuration is ignored in production builds.
@@ -53,6 +54,13 @@ export default function LoggedIn({ onLogout }) {
       // Progress remains available for this session if local storage is unavailable.
     }
   }, [stage, phase]);
+
+  useEffect(() => {
+    // On login this warms stages 1 and 2. Each later stage warms itself and
+    // the following stage while the visitor is still progressing.
+    preloadStageAssets(stage);
+    preloadStageAssets(stage + 1);
+  }, [stage]);
 
   const getInitialPhase = (currentStageNumber) => {
     if (stage === currentStageNumber) {
@@ -130,7 +138,7 @@ export default function LoggedIn({ onLogout }) {
       <audio
         ref={finalAudioRef}
         src={finalStageTrack}
-        preload="auto"
+        preload={stage >= 4 ? "auto" : "none"}
         playsInline
       />
     </>

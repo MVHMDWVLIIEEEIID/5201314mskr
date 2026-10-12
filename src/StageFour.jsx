@@ -149,22 +149,22 @@ export default function StageFour({
     },
     {
       phaseNo: 4,
-      text: "I-It's N-Not Like I Care Or Somthing Anyway... Baka-aa!",
+      text: "Awwwwww , I Knew You Have Feelings For Me",
       centerContent: (
         <img
-          src={hmph}
-          alt="hmph"
+          src={smile}
+          alt="smiling cat"
           className="h-full w-full rounded-2xl object-contain"
         />
       ),
     },
     {
       phaseNo: 5,
-      text: "Nvm... Awwwwww , I Knew You Have Feelings For Me",
+      text: "I-It's N-Not Like I Care Or Somthing Anyway... Baka-aa!",
       centerContent: (
         <img
-          src={smile}
-          alt="smiling cat"
+          src={hmph}
+          alt="hmph"
           className="h-full w-full rounded-2xl object-contain"
         />
       ),
