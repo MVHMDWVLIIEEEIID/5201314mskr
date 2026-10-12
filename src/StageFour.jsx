@@ -3,7 +3,11 @@ import shut from "./assets/shut.gif";
 import side from "./assets/side.gif";
 import billie from "./assets/billie.png";
 import smile from "./assets/smile.gif";
+import hmph from "./assets/hmph.gif";
+import hmph2 from "./assets/hmph2.gif";
+import uwu from "./assets/uwu.gif";
 import shyc from "./assets/shyc.gif";
+import shy2 from "./assets/shy2.gif";
 import come from "./assets/come.gif";
 import sonic from "./assets/sonic-side-eye.gif";
 import Phase from "./components/Phase.jsx";
@@ -145,7 +149,18 @@ export default function StageFour({
     },
     {
       phaseNo: 4,
-      text: "Awwwwww , I Knew That You Have Feelings For Me",
+      text: "I-It's N-Not Like I Care Or Somthing Anyway... Baka-aa!",
+      centerContent: (
+        <img
+          src={hmph}
+          alt="hmph"
+          className="h-full w-full rounded-2xl object-contain"
+        />
+      ),
+    },
+    {
+      phaseNo: 5,
+      text: "Nvm... Awwwwww , I Knew You Have Feelings For Me",
       centerContent: (
         <img
           src={smile}
@@ -155,7 +170,7 @@ export default function StageFour({
       ),
     },
     {
-      phaseNo: 5,
+      phaseNo: 6,
       text: "Ok Me Too That's Why There's Smth Waiting For You Next",
       centerContent: (
         <img
@@ -166,7 +181,7 @@ export default function StageFour({
       ),
     },
     {
-      phaseNo: 6,
+      phaseNo: 7,
       text: "Surprise!!!",
       delayedText: "Turn off the Candles",
       delayedTextDelay: 5000,
@@ -178,7 +193,7 @@ export default function StageFour({
       centerContentClassName: "absolute inset-0 bottom-28 z-0",
     },
     {
-      phaseNo: 7,
+      phaseNo: 8,
       text: "Come With Me, I Know Another Thing We Can Do",
       centerContent: (
         <img
@@ -189,7 +204,7 @@ export default function StageFour({
       ),
     },
     {
-      phaseNo: 8,
+      phaseNo: 9,
       text: "",
       noTypeIt: true,
       centerContent: <StagePiano onContinue={() => handleNext()} />,
@@ -197,7 +212,40 @@ export default function StageFour({
       showContinueButton: false,
     },
     {
-      phaseNo: 9,
+      phaseNo: 10,
+      text: "So... How Was My Playing? Be Honest, You're Impressed.",
+      centerContent: (
+        <img
+          src={shy2}
+          alt="smiling cat"
+          className="h-full w-full rounded-2xl object-contain"
+        />
+      ),
+    },
+    {
+      phaseNo: 11,
+      text: "I-It's Not Like I Practiced It For Days Just For You Or Anything...",
+      centerContent: (
+        <img
+          src={hmph2}
+          alt="hmph"
+          className="h-full w-full rounded-2xl object-contain"
+        />
+      ),
+    },
+    {
+      phaseNo: 12,
+      text: "Okay, Maybe I Did.",
+      centerContent: (
+        <img
+          src={uwu}
+          alt="shy cat"
+          className="h-full w-full rounded-2xl object-contain"
+        />
+      ),
+    },
+    {
+      phaseNo: 13,
       text: "ضحكنا وهزرنا مش خلاص بقا ولا اي",
       centerContent: (
         <img

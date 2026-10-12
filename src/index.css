@@ -29,6 +29,52 @@ body {
 	animation: audio-toast-in 500ms 350ms both cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.volume-slider {
+	appearance: none;
+	-webkit-appearance: none;
+	background: transparent;
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+	width: 0.35rem;
+	border-radius: 9999px;
+	background: linear-gradient(
+		to right,
+		white 0%,
+		white var(--volume-progress),
+		rgb(255 255 255 / 25%) var(--volume-progress),
+		rgb(255 255 255 / 25%) 100%
+	);
+}
+
+.volume-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 0.8rem;
+	height: 0.8rem;
+	border: 2px solid black;
+	border-radius: 9999px;
+	background: white;
+}
+
+.volume-slider::-moz-range-track {
+	width: 0.35rem;
+	border-radius: 9999px;
+	background: rgb(255 255 255 / 25%);
+}
+
+.volume-slider::-moz-range-progress {
+	border-radius: 9999px;
+	background: white;
+}
+
+.volume-slider::-moz-range-thumb {
+	width: 0.8rem;
+	height: 0.8rem;
+	border: 2px solid black;
+	border-radius: 9999px;
+	background: white;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.audio-toast-in {
 		animation: none;

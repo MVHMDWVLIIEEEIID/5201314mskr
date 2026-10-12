@@ -1,24 +1,43 @@
 // FinalStage.jsx
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AudioToast from "./components/AudioToast";
 import ModernVerticalSlider from "./components/ModernVerticalSlider";
 import CinematicSplitText from "./components/CinematicSplitText";
-import mp3 from "./assets/Floating in Reverie.mp3";
 
-export default function FinalStage() {
-  const audioRef = useRef(null);
+export default function FinalStage({ audioRef }) {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showEndScreen, setShowEndScreen] = useState(false);
 
-  // Start playback immediately; browsers may still require a user gesture.
+  // This also covers direct navigation to the final stage. Normal stage
+  // progression starts playback in the preceding click handler.
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current
-        .play()
-        .catch((err) => console.log("Autoplay blocked:", err));
-    }
-  }, []);
+    const audio = audioRef.current;
+    if (!audio) return undefined;
+
+    audio.volume = 0.75;
+
+    const playAudio = () => audio.play().catch(() => {});
+
+    playAudio();
+
+    // Browsers prohibit audible playback when this stage is opened directly
+    // (for example, via the development stage bypass). Start as soon as the
+    // visitor performs their first normal interaction in that case.
+    const resumeAfterInteraction = () => {
+      if (audio.paused) playAudio();
+    };
+
+    window.addEventListener("pointerdown", resumeAfterInteraction, {
+      once: true,
+    });
+    window.addEventListener("keydown", resumeAfterInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", resumeAfterInteraction);
+      window.removeEventListener("keydown", resumeAfterInteraction);
+    };
+  }, [audioRef]);
 
   // timeupdate events are relatively infrequent, so sample the audio clock on
   // animation frames to keep the text fade synchronized with playback.
@@ -53,16 +72,26 @@ export default function FinalStage() {
     }
   };
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return undefined;
+
+    const updateDuration = () => setDuration(audio.duration);
+
+    updateDuration();
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleAudioEnded);
+
+    return () => {
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleAudioEnded);
+    };
+  }, [audioRef]);
+
   return (
     <main className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-black selection:bg-white/20">
-      <audio
-        ref={audioRef}
-        src={mp3}
-        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleAudioEnded}
-      />
-
       <div
         className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
           showEndScreen ? "pointer-events-none opacity-0" : "opacity-100"

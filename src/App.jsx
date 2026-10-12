@@ -4,8 +4,17 @@ import LoggedIn from "./LoggedIn.jsx";
 import MobileBlocker from "./components/MobileBlocker.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 
+// Set this to true when developing locally to open the app without logging in.
+// Vite removes the bypass in production builds, regardless of this setting.
+const developmentLoginBypass = false;
+const shouldBypassLogin = import.meta.env.DEV && developmentLoginBypass;
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    if (shouldBypassLogin) {
+      return true;
+    }
+
     try {
       return localStorage.getItem("mybeloved:isLoggedIn") === "true";
     } catch {
@@ -14,6 +23,10 @@ export default function App() {
   });
 
   useEffect(() => {
+    if (shouldBypassLogin) {
+      return;
+    }
+
     try {
       localStorage.setItem("mybeloved:isLoggedIn", String(isLoggedIn));
     } catch {

@@ -1,18 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StageOne from "./StageOne.jsx";
 import StageTwo from "./StageTwo.jsx";
 import StageThree from "./StageThree.jsx";
 import StageFour from "./StageFour.jsx";
 import FinalStage from "./FinalStage.jsx";
+import finalStageTrack from "./assets/Floating in Reverie.mp3";
 
+// Edit these while developing to choose where the app starts.
+// This configuration is ignored in production builds.
 const developmentBypass = {
   enabled: false,
-  stage: 5,
-  phase: 1    ,
+  stage: 4,
+  phase: 10,
 };
+const shouldBypassProgress = import.meta.env.DEV && developmentBypass.enabled;
 
 export default function LoggedIn({ onLogout }) {
+  const finalAudioRef = useRef(null);
   const [stage, setStage] = useState(() => {
+    if (shouldBypassProgress) {
+      return developmentBypass.stage;
+    }
+
     try {
       const savedStage = Number(localStorage.getItem("mybeloved:stage"));
       if (Number.isInteger(savedStage) && savedStage >= 1 && savedStage <= 5) {
@@ -21,9 +30,13 @@ export default function LoggedIn({ onLogout }) {
     } catch {
       // Use the normal initial stage when local storage is unavailable.
     }
-    return developmentBypass.enabled ? developmentBypass.stage : 1;
+    return 1;
   });
   const [phase, setPhase] = useState(() => {
+    if (shouldBypassProgress) {
+      return developmentBypass.phase;
+    }
+
     try {
       const savedPhase = Number(localStorage.getItem("mybeloved:phase"));
       return Number.isInteger(savedPhase) && savedPhase >= 1 ? savedPhase : 1;
@@ -49,6 +62,14 @@ export default function LoggedIn({ onLogout }) {
   };
 
   function advanceToStage(nextStage) {
+    // Calling play in this click handler retains the browser's user activation.
+    // Calling it only after FinalStage renders can be rejected as autoplay.
+    if (nextStage === 5 && finalAudioRef.current) {
+      const audio = finalAudioRef.current;
+      audio.volume = 0.75;
+      audio.play().catch((err) => console.log("Playback blocked:", err));
+    }
+
     setStage(nextStage);
     setPhase(1);
   }
@@ -92,7 +113,7 @@ export default function LoggedIn({ onLogout }) {
       />
     );
   } else {
-    stageContent = <FinalStage />;
+    stageContent = <FinalStage audioRef={finalAudioRef} />;
   }
 
   return (
@@ -106,6 +127,12 @@ export default function LoggedIn({ onLogout }) {
         Logout
       </button>
       {stageContent}
+      <audio
+        ref={finalAudioRef}
+        src={finalStageTrack}
+        preload="auto"
+        playsInline
+      />
     </>
   );
 }
